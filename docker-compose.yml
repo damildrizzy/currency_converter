@@ -1,0 +1,35 @@
+version: '3.3'
+services:
+    server:
+        build: .
+        volumes:
+            - ./app:/app
+        ports:
+            - "8000:80"
+        environment:
+            - EXCHANGE_RATE_API_URL=https://api.exchangerate.host
+            - DATABASE_URL=postgres://user:notasafepassword@db/converter_db
+            - SECRET_KEY=notasafekey
+
+        command: /start-reload.sh
+        depends_on:
+            -   redis
+            -   db
+
+    redis:
+        image: "redis:alpine"
+        hostname: redis
+        ports:
+            - "6379:6379"
+
+    db:
+        image: postgres:12.0-alpine
+        environment:
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=notasafepassword
+            - POSTGRES_DB=converter_db
+            - PGDATA=/tmp
+        volumes:
+            - app-db-data:/var/lib/postgresql/data/pgdata
+volumes:
+    app-db-data:
