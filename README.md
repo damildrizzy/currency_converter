@@ -2,7 +2,7 @@
 
 ### Features
 
-* supports 164 currencies
+* supports 170 forex currencies
 * source data is fetched via [https://exchangerate.host](https://exchangerate.host)
 * authentication
 
